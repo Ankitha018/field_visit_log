@@ -7,11 +7,7 @@ class LoadingView extends StatelessWidget {
   final double? size;
   final double strokeWidth;
 
-  const LoadingView({
-    super.key,
-    this.size,
-    this.strokeWidth = 2.0,
-  });
+  const LoadingView({super.key, this.size, this.strokeWidth = 2.0});
 
   @override
   Widget build(BuildContext context) {

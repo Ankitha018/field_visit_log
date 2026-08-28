@@ -1,4 +1,5 @@
 import '../entities/visit.dart';
+import '../enums/visit_status.dart';
 import '../repositories/visit_repository.dart';
 
 class SyncVisits {

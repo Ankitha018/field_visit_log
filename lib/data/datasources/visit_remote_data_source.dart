@@ -1,27 +1,17 @@
 import 'dart:math';
 
-enum MockSyncResult {
-  synced,
-  draft,
-  failed,
-}
+enum MockSyncResult { synced, draft, failed }
 
 class VisitRemoteDataSource {
-  VisitRemoteDataSource({
-    Random? random,
-  }) : _random = random ?? Random();
+  VisitRemoteDataSource({Random? random}) : _random = random ?? Random();
 
   final Random _random;
 
   Future<MockSyncResult> syncVisit() async {
-    await Future<void>.delayed(
-      const Duration(milliseconds: 800),
-    );
+    await Future<void>.delayed(const Duration(milliseconds: 800));
 
     final results = MockSyncResult.values;
 
-    return results[
-    _random.nextInt(results.length)
-    ];
+    return results[_random.nextInt(results.length)];
   }
 }

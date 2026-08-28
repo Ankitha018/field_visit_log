@@ -9,25 +9,19 @@ class LoadVisits extends VisitEvent {
 }
 
 class CreateVisitEvent extends VisitEvent {
-  const CreateVisitEvent({
-    required this.visit,
-  });
+  const CreateVisitEvent({required this.visit});
 
   final Visit visit;
 }
 
 class UpdateVisitEvent extends VisitEvent {
-  const UpdateVisitEvent({
-    required this.visit,
-  });
+  const UpdateVisitEvent({required this.visit});
 
   final Visit visit;
 }
 
 class SyncVisitEvent extends VisitEvent {
-  const SyncVisitEvent({
-    required this.visit,
-  });
+  const SyncVisitEvent({required this.visit});
 
   final Visit visit;
 }

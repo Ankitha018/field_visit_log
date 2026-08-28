@@ -26,41 +26,26 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(
-          AppSpacing.paddingXl,
-        ),
+        padding: const EdgeInsets.all(AppSpacing.paddingXl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: AppDimensions.iconLarge,
-              color: AppColors.muted,
-            ),
-            const SizedBox(
-              height: AppSpacing.gapLg,
-            ),
+            Icon(icon, size: AppDimensions.iconLarge, color: AppColors.muted),
+            const SizedBox(height: AppSpacing.gapLg),
             Text(
               title,
               textAlign: TextAlign.center,
               style: AppTextStyles.title,
             ),
-            const SizedBox(
-              height: AppSpacing.gapSm,
-            ),
+            const SizedBox(height: AppSpacing.gapSm),
             Text(
               message,
               textAlign: TextAlign.center,
               style: AppTextStyles.bodySecondary,
             ),
             if (actionLabel != null && onAction != null) ...[
-              const SizedBox(
-                height: AppSpacing.gapLg,
-              ),
-              PrimaryButton(
-                label: actionLabel!,
-                onPressed: onAction,
-              ),
+              const SizedBox(height: AppSpacing.gapLg),
+              PrimaryButton(label: actionLabel!, onPressed: onAction),
             ],
           ],
         ),

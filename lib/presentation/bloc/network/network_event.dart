@@ -7,9 +7,7 @@ class NetworkStarted extends NetworkEvent {
 }
 
 class NetworkChanged extends NetworkEvent {
-  const NetworkChanged({
-    required this.isConnected,
-  });
+  const NetworkChanged({required this.isConnected});
 
   final bool isConnected;
 }

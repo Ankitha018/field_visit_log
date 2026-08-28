@@ -32,7 +32,5 @@ class AppSpacing {
 
   static const EdgeInsets cardPadding = EdgeInsets.all(lg);
 
-  static const EdgeInsets sectionPadding = EdgeInsets.symmetric(
-    vertical: xl,
-  );
+  static const EdgeInsets sectionPadding = EdgeInsets.symmetric(vertical: xl);
 }

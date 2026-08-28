@@ -30,40 +30,34 @@ class PrimaryButton extends StatelessWidget {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.paddingLg,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.paddingLg),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         ),
         child: isLoading
             ? const SizedBox(
-          width: 16,
-          height: 16,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: AppColors.onPrimary,
-          ),
-        )
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.onPrimary,
+                ),
+              )
             : Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[
-              icon!,
-              const SizedBox(
-                width: AppSpacing.gapSm,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) ...[
+                    icon!,
+                    const SizedBox(width: AppSpacing.gapSm),
+                  ],
+                  Text(
+                    label,
+                    style: AppTextStyles.button.copyWith(
+                      color: AppColors.onPrimary,
+                    ),
+                  ),
+                ],
               ),
-            ],
-            Text(
-              label,
-              style: AppTextStyles.button.copyWith(
-                color: AppColors.onPrimary,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

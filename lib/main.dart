@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'app/app.dart';
 import 'app/di/injection.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Injection.initialize();
+  await Injection.initialize();
 
-  runApp(
-    const FieldVisitApp(),
-  );
+  runApp(const FieldVisitApp());
 }

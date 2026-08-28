@@ -1,4 +1,5 @@
 import '../entities/visit.dart';
+import '../enums/visit_status.dart';
 
 abstract class VisitRepository {
   Future<List<Visit>> getVisits();

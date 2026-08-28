@@ -42,8 +42,8 @@ class AppDateField extends StatelessWidget {
     final displayText = value == null
         ? 'Select date'
         : '${value!.day.toString().padLeft(2, '0')}/'
-        '${value!.month.toString().padLeft(2, '0')}/'
-        '${value!.year}';
+              '${value!.month.toString().padLeft(2, '0')}/'
+              '${value!.year}';
 
     return InkWell(
       onTap: enabled ? () => _selectDate(context) : null,
@@ -61,15 +61,11 @@ class AppDateField extends StatelessWidget {
           labelStyle: AppTextStyles.caption,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(
-              color: AppColors.border,
-            ),
+            borderSide: const BorderSide(color: AppColors.border),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(
-              color: AppColors.border,
-            ),
+            borderSide: const BorderSide(color: AppColors.border),
           ),
         ),
         child: Row(

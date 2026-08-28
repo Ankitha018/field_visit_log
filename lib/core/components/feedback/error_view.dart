@@ -22,9 +22,7 @@ class ErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(
-          AppSpacing.paddingXl,
-        ),
+        padding: const EdgeInsets.all(AppSpacing.paddingXl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -33,22 +31,15 @@ class ErrorView extends StatelessWidget {
               size: AppDimensions.iconLarge,
               color: AppColors.error,
             ),
-            const SizedBox(
-              height: AppSpacing.gapLg,
-            ),
+            const SizedBox(height: AppSpacing.gapLg),
             Text(
               message,
               textAlign: TextAlign.center,
               style: AppTextStyles.body,
             ),
             if (onRetry != null) ...[
-              const SizedBox(
-                height: AppSpacing.gapLg,
-              ),
-              PrimaryButton(
-                label: retryLabel,
-                onPressed: onRetry,
-              ),
+              const SizedBox(height: AppSpacing.gapLg),
+              PrimaryButton(label: retryLabel, onPressed: onRetry),
             ],
           ],
         ),

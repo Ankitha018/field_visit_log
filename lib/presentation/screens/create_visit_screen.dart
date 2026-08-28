@@ -1,59 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/theme/app_spacing.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../domain/entities/visit.dart';
+import '../../domain/enums/visit_status.dart';
 import '../bloc/visit/visit_bloc.dart';
 import '../bloc/visit/visit_event.dart';
 import '../bloc/visit/visit_state.dart';
 import '../widgets/visit_form.dart';
 
 class CreateVisitScreen extends StatelessWidget {
-  const CreateVisitScreen({
-    super.key,
-  });
+  const CreateVisitScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Visit'),
-      ),
+      appBar: AppBar(title: const Text('Create Visit')),
       body: BlocListener<VisitBloc, VisitState>(
         listener: (context, state) {
-          if (state is VisitLoaded) {
+          if (state is VisitCreated) {
             Navigator.pop(context);
+            return;
           }
 
           if (state is VisitError) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            SnackbarHelper.showError(context, state.message);
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(AppSpacing.paddingMd),
           child: VisitForm(
-            onSubmit: () {
-              final visit = Visit(
-                id: DateTime.now()
-                    .microsecondsSinceEpoch
-                    .toString(),
-                date: DateTime.now(),
-                location: 'New Location',
-                note: 'New Visit',
-                status: VisitStatus.draft,
-                createdAt: DateTime.now(),
-              );
+            onSubmit:
+                ({
+                  required String siteName,
+                  required DateTime date,
+                  required String location,
+                  required String notes,
+                }) {
+                  final now = DateTime.now();
 
-              context.read<VisitBloc>().add(
-                CreateVisitEvent(
-                  visit: visit,
-                ),
-              );
-            },
+                  final visit = Visit(
+                    id: now.microsecondsSinceEpoch.toString(),
+                    siteName: siteName,
+                    date: date,
+                    location: location,
+                    notes: notes,
+                    status: VisitStatus.draft,
+                    createdAt: now,
+                  );
+
+                  context.read<VisitBloc>().add(CreateVisitEvent(visit: visit));
+                },
           ),
         ),
       ),

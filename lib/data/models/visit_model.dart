@@ -1,80 +1,91 @@
 import '../../domain/entities/visit.dart';
+import '../../domain/enums/visit_status.dart';
 
 class VisitModel {
   const VisitModel({
     required this.id,
+    required this.siteName,
     required this.date,
     required this.location,
-    required this.note,
+    required this.notes,
     required this.status,
     required this.createdAt,
     this.syncedAt,
   });
 
   final String id;
+  final String siteName;
   final DateTime date;
   final String location;
-  final String note;
+  final String notes;
   final VisitStatus status;
   final DateTime createdAt;
   final DateTime? syncedAt;
 
-  Map<String, dynamic> toLocalMap() {
+  factory VisitModel.fromMap(Map<String, dynamic> map) {
+    final stage = map['stage'] as String?;
+
+    return VisitModel(
+      id: map['id'] as String,
+      siteName: map['site_name'] as String,
+      date: DateTime.parse(map['date'] as String),
+      location: map['location'] as String,
+      notes: map['notes'] as String,
+      status: stage == null ? VisitStatus.draft : VisitStatus.fromString(stage),
+      createdAt: DateTime.parse(map['created_at'] as String),
+      syncedAt: map['synced_at'] == null
+          ? null
+          : DateTime.parse(map['synced_at'] as String),
+    );
+  }
+
+  Map<String, dynamic> toLocalVisitMap() {
     return {
       'id': id,
+      'site_name': siteName,
       'date': date.toIso8601String(),
       'location': location,
-      'note': note,
+      'notes': notes,
       'created_at': createdAt.toIso8601String(),
     };
   }
 
-  Map<String, dynamic> toLogMap() {
+  Map<String, dynamic> toVisitLogMap() {
     return {
       'id': id,
+      'site_name': siteName,
       'date': date.toIso8601String(),
       'location': location,
-      'note': note,
+      'notes': notes,
       'stage': status.value,
       'created_at': createdAt.toIso8601String(),
       'synced_at': syncedAt?.toIso8601String(),
     };
   }
 
-  factory VisitModel.fromLocalMap(
-      Map<String, dynamic> map,
-      ) {
-    return VisitModel(
-      id: map['id'] as String,
-      date: DateTime.parse(map['date'] as String),
-      location: map['location'] as String,
-      note: map['note'] as String,
-      status: VisitStatus.draft,
-      createdAt: DateTime.parse(
-        map['created_at'] as String,
-      ),
+  Visit toEntity() {
+    return Visit(
+      id: id,
+      siteName: siteName,
+      date: date,
+      location: location,
+      notes: notes,
+      status: status,
+      createdAt: createdAt,
+      syncedAt: syncedAt,
     );
   }
 
-  factory VisitModel.fromLogMap(
-      Map<String, dynamic> map,
-      ) {
+  factory VisitModel.fromEntity(Visit visit) {
     return VisitModel(
-      id: map['id'] as String,
-      date: DateTime.parse(map['date'] as String),
-      location: map['location'] as String,
-      note: map['note'] as String,
-      status: VisitStatusExtension.fromValue(
-        map['stage'] as String,
-      ),
-      createdAt: DateTime.parse(
-        map['created_at'] as String,
-      ),
-      syncedAt: map['synced_at'] == null
-          ? null
-          : DateTime.parse(
-        map['synced_at'] as String,
-      ),
+      id: visit.id,
+      siteName: visit.siteName,
+      date: visit.date,
+      location: visit.location,
+      notes: visit.notes,
+      status: visit.status,
+      createdAt: visit.createdAt,
+      syncedAt: visit.syncedAt,
     );
   }
 }

@@ -39,10 +39,7 @@ class AppTheme {
         labelMedium: AppTextStyles.label,
       ),
 
-      dividerTheme: const DividerThemeData(
-        color: AppColors.line,
-        thickness: 1,
-      ),
+      dividerTheme: const DividerThemeData(color: AppColors.line, thickness: 1),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -51,27 +48,19 @@ class AppTheme {
         hintStyle: AppTextStyles.caption,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: AppColors.border,
-          ),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: AppColors.border,
-          ),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-          ),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(
-            color: AppColors.error,
-          ),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
       ),
     );

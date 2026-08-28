@@ -9,9 +9,7 @@ class ShimmerLoader extends StatefulWidget {
   const ShimmerLoader({
     super.key,
     required this.child,
-    this.duration = const Duration(
-      milliseconds: 1200,
-    ),
+    this.duration = const Duration(milliseconds: 1200),
   });
 
   @override
@@ -26,10 +24,8 @@ class _ShimmerLoaderState extends State<ShimmerLoader>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    )..repeat();
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..repeat();
   }
 
   @override

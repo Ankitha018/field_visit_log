@@ -1,8 +1,5 @@
 abstract class AppException implements Exception {
-  const AppException({
-    required this.message,
-    this.code,
-  });
+  const AppException({required this.message, this.code});
 
   final String message;
   final String? code;
@@ -15,15 +12,9 @@ abstract class AppException implements Exception {
 }
 
 class DatabaseException extends AppException {
-  const DatabaseException({
-    required super.message,
-    super.code,
-  });
+  const DatabaseException({required super.message, super.code});
 }
 
 class SyncException extends AppException {
-  const SyncException({
-    required super.message,
-    super.code,
-  });
+  const SyncException({required super.message, super.code});
 }

@@ -3,16 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/components/buttons/primary_button.dart';
 import '../../core/components/chips/status_chip.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../domain/entities/visit.dart';
+import '../../domain/enums/visit_status.dart';
 import '../bloc/visit/visit_bloc.dart';
 import '../bloc/visit/visit_event.dart';
 import '../bloc/visit/visit_state.dart';
 
 class VisitDetailsScreen extends StatelessWidget {
-  const VisitDetailsScreen({
-    super.key,
-    required this.visit,
-  });
+  const VisitDetailsScreen({super.key, required this.visit});
 
   final Visit visit;
 
@@ -45,37 +46,19 @@ class VisitDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visit Details'),
-      ),
+      appBar: AppBar(title: const Text('Visit Details')),
       body: BlocConsumer<VisitBloc, VisitState>(
         listener: (context, state) {
           if (state is VisitSynced) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Visit synced successfully.',
-                ),
-              ),
-            );
+            SnackbarHelper.showSuccess(context, 'Visit synced successfully.');
           }
 
           if (state is VisitDraft) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Visit saved as draft.',
-                ),
-              ),
-            );
+            SnackbarHelper.showSuccess(context, 'Visit saved as draft.');
           }
 
           if (state is VisitFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            SnackbarHelper.showError(context, state.message);
           }
         },
         builder: (context, state) {
@@ -86,16 +69,17 @@ class VisitDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  visit.location,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
+                Text(visit.siteName, style: AppTextStyles.headline),
 
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.paddingMd),
 
-                Text(visit.note),
+                Text(visit.location, style: AppTextStyles.bodySecondary),
 
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.paddingMd),
+
+                Text(visit.notes, style: AppTextStyles.body),
+
+                SizedBox(height: AppSpacing.paddingMd),
 
                 StatusChip(
                   label: _getStatusLabel(visit.status),
@@ -109,12 +93,10 @@ class VisitDetailsScreen extends StatelessWidget {
                   onPressed: saving
                       ? null
                       : () {
-                    context.read<VisitBloc>().add(
-                      SyncVisitEvent(
-                        visit: visit,
-                      ),
-                    );
-                  },
+                          context.read<VisitBloc>().add(
+                            SyncVisitEvent(visit: visit),
+                          );
+                        },
                 ),
               ],
             ),

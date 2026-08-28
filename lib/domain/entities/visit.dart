@@ -1,70 +1,59 @@
-enum VisitStatus {
-  draft,
-  synced,
-  failed,
-}
+import 'package:equatable/equatable.dart';
 
-extension VisitStatusExtension on VisitStatus {
-  String get value {
-    switch (this) {
-      case VisitStatus.draft:
-        return 'draft';
-      case VisitStatus.synced:
-        return 'synced';
-      case VisitStatus.failed:
-        return 'failed';
-    }
-  }
+import '../enums/visit_status.dart';
 
-  static VisitStatus fromValue(String value) {
-    switch (value) {
-      case 'synced':
-        return VisitStatus.synced;
-      case 'failed':
-        return VisitStatus.failed;
-      case 'draft':
-      default:
-        return VisitStatus.draft;
-    }
-  }
-}
-
-class Visit {
+class Visit extends Equatable {
   const Visit({
     required this.id,
+    required this.siteName,
     required this.date,
     required this.location,
-    required this.note,
+    required this.notes,
     required this.status,
     required this.createdAt,
     this.syncedAt,
   });
 
   final String id;
+  final String siteName;
   final DateTime date;
   final String location;
-  final String note;
+  final String notes;
   final VisitStatus status;
   final DateTime createdAt;
   final DateTime? syncedAt;
 
   Visit copyWith({
     String? id,
+    String? siteName,
     DateTime? date,
     String? location,
-    String? note,
+    String? notes,
     VisitStatus? status,
     DateTime? createdAt,
     DateTime? syncedAt,
   }) {
     return Visit(
       id: id ?? this.id,
+      siteName: siteName ?? this.siteName,
       date: date ?? this.date,
       location: location ?? this.location,
-      note: note ?? this.note,
+      notes: notes ?? this.notes,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       syncedAt: syncedAt ?? this.syncedAt,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    siteName,
+    date,
+    location,
+    notes,
+    status,
+    createdAt,
+    syncedAt,
+  ];
 }

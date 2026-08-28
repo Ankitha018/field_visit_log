@@ -10,49 +10,30 @@ import 'route_names.dart';
 class AppRoutes {
   const AppRoutes._();
 
-  static Route<dynamic> generateRoute(
-      RouteSettings settings,
-      ) {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.visits:
-        return MaterialPageRoute(
-          builder: (_) =>
-          const VisitListScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const VisitListScreen());
 
       case RouteNames.createVisit:
-        return MaterialPageRoute(
-          builder: (_) =>
-          const CreateVisitScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const CreateVisitScreen());
 
       case RouteNames.updateVisit:
-        final visit =
-        settings.arguments as Visit;
+        final visit = settings.arguments as Visit;
 
         return MaterialPageRoute(
-          builder: (_) =>
-              UpdateVisitScreen(
-                visit: visit,
-              ),
+          builder: (_) => UpdateVisitScreen(visit: visit),
         );
 
       case RouteNames.visitDetails:
-        final visit =
-        settings.arguments as Visit;
+        final visit = settings.arguments as Visit;
 
         return MaterialPageRoute(
-          builder: (_) =>
-              VisitDetailsScreen(
-                visit: visit,
-              ),
+          builder: (_) => VisitDetailsScreen(visit: visit),
         );
 
       default:
-        return MaterialPageRoute(
-          builder: (_) =>
-          const VisitListScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const VisitListScreen());
     }
   }
 }

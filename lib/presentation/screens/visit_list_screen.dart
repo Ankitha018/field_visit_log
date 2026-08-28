@@ -6,27 +6,59 @@ import '../../core/components/feedback/empty_state.dart';
 import '../../core/components/feedback/error_view.dart';
 import '../../core/components/feedback/loading_view.dart';
 import '../bloc/visit/visit_bloc.dart';
+import '../bloc/visit/visit_event.dart';
 import '../bloc/visit/visit_state.dart';
 import '../widgets/visit_list.dart';
 
-class VisitListScreen extends StatelessWidget {
-  const VisitListScreen({
-    super.key,
-  });
+class VisitListScreen extends StatefulWidget {
+  const VisitListScreen({super.key});
+
+  @override
+  State<VisitListScreen> createState() => _VisitListScreenState();
+}
+
+class _VisitListScreenState extends State<VisitListScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<VisitBloc>().add(const LoadVisits());
+      }
+    });
+  }
+
+  Future<void> _openCreateVisit() async {
+    await Navigator.pushNamed(context, RouteNames.createVisit);
+
+    if (!mounted) {
+      return;
+    }
+
+    context.read<VisitBloc>().add(const LoadVisits());
+  }
+
+  Future<void> _openVisitDetails(visit) async {
+    await Navigator.pushNamed(
+      context,
+      RouteNames.visitDetails,
+      arguments: visit,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    context.read<VisitBloc>().add(const LoadVisits());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Field Visits'),
-      ),
+      appBar: AppBar(title: const Text('Field Visits')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            RouteNames.createVisit,
-          );
-        },
+        onPressed: _openCreateVisit,
         child: const Icon(Icons.add),
       ),
       body: BlocBuilder<VisitBloc, VisitState>(
@@ -40,31 +72,18 @@ class VisitListScreen extends StatelessWidget {
               title: 'No visits yet',
               icon: Icons.assignment_outlined,
               message: 'Create your first field visit.',
-              onAction: () {
-                Navigator.pushNamed(
-                  context,
-                  RouteNames.createVisit,
-                );
-              },
+              onAction: _openCreateVisit,
             );
           }
 
           if (state is VisitError) {
-            return ErrorView(
-              message: state.message,
-            );
+            return ErrorView(message: state.message);
           }
 
           if (state is VisitLoaded) {
             return VisitList(
               visits: state.visits,
-              onVisitTap: (visit) {
-                Navigator.pushNamed(
-                  context,
-                  RouteNames.visitDetails,
-                  arguments: visit,
-                );
-              },
+              onVisitTap: _openVisitDetails,
             );
           }
 

@@ -4,23 +4,13 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
 
-enum StatusChipType {
-  neutral,
-  success,
-  warning,
-  error,
-  primary,
-}
+enum StatusChipType { neutral, success, warning, error, primary }
 
 class StatusChip extends StatelessWidget {
   final String label;
   final StatusChipType type;
 
-  const StatusChip({
-    super.key,
-    required this.label,
-    required this.type,
-  });
+  const StatusChip({super.key, required this.label, required this.type});
 
   Color get _backgroundColor {
     switch (type) {
@@ -28,24 +18,16 @@ class StatusChip extends StatelessWidget {
         return AppColors.hover;
 
       case StatusChipType.success:
-        return AppColors.success.withValues(
-          alpha: 0.12,
-        );
+        return AppColors.success.withValues(alpha: 0.12);
 
       case StatusChipType.warning:
-        return AppColors.warning.withValues(
-          alpha: 0.12,
-        );
+        return AppColors.warning.withValues(alpha: 0.12);
 
       case StatusChipType.error:
-        return AppColors.error.withValues(
-          alpha: 0.12,
-        );
+        return AppColors.error.withValues(alpha: 0.12);
 
       case StatusChipType.primary:
-        return AppColors.primary.withValues(
-          alpha: 0.08,
-        );
+        return AppColors.primary.withValues(alpha: 0.08);
     }
   }
 

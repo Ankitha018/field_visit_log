@@ -1,3 +1,6 @@
+import 'package:sqflite/sqflite.dart';
+
+import '../../core/database/database_helper.dart';
 import '../../core/network/connectivity_service.dart';
 
 import '../../data/datasources/visit_local_data_source.dart';
@@ -19,6 +22,8 @@ class Injection {
 
   static late ConnectivityService connectivityService;
 
+  static late Database database;
+
   static late VisitLocalDataSource localDataSource;
   static late VisitRemoteDataSource remoteDataSource;
 
@@ -31,12 +36,15 @@ class Injection {
   static late UpdateVisit updateVisit;
   static late SyncVisits syncVisits;
 
-  static void initialize() {
+  static Future<void> initialize() async {
     // Core
     connectivityService = ConnectivityService();
 
+    // Database
+    database = await DatabaseHelper.instance.database;
+
     // Data sources
-    localDataSource = VisitLocalDataSource();
+    localDataSource = VisitLocalDataSource(database);
     remoteDataSource = VisitRemoteDataSource();
 
     // Mapper
@@ -69,8 +77,6 @@ class Injection {
   }
 
   static NetworkBloc createNetworkBloc() {
-    return NetworkBloc(
-      service: connectivityService,
-    );
+    return NetworkBloc(service: connectivityService);
   }
 }

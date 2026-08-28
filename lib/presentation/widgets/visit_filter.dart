@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class VisitFilter extends StatelessWidget {
-  const VisitFilter({
-    super.key,
-    required this.onChanged,
-  });
+  const VisitFilter({super.key, required this.onChanged});
 
   final ValueChanged<String> onChanged;
 

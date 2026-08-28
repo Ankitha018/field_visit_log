@@ -9,25 +9,18 @@ import 'routes/app_routes.dart';
 import 'routes/route_names.dart';
 
 class FieldVisitApp extends StatelessWidget {
-  const FieldVisitApp({
-    super.key,
-  });
+  const FieldVisitApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => Injection.createNetworkBloc()
-            ..add(
-              const NetworkStarted(),
-            ),
+          create: (_) =>
+              Injection.createNetworkBloc()..add(const NetworkStarted()),
         ),
         BlocProvider(
-          create: (_) => Injection.createVisitBloc()
-            ..add(
-              const LoadVisits(),
-            ),
+          create: (_) => Injection.createVisitBloc()..add(const LoadVisits()),
         ),
       ],
       child: MaterialApp(

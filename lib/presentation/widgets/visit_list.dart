@@ -4,11 +4,7 @@ import '../../domain/entities/visit.dart';
 import 'visit_card.dart';
 
 class VisitList extends StatelessWidget {
-  const VisitList({
-    super.key,
-    required this.visits,
-    this.onVisitTap,
-  });
+  const VisitList({super.key, required this.visits, this.onVisitTap});
 
   final List<Visit> visits;
   final ValueChanged<Visit>? onVisitTap;
@@ -18,16 +14,13 @@ class VisitList extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: visits.length,
-      separatorBuilder: (_, __) =>
-      const SizedBox(height: 12),
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final visit = visits[index];
 
         return VisitCard(
           visit: visit,
-          onTap: onVisitTap == null
-              ? null
-              : () => onVisitTap!(visit),
+          onTap: onVisitTap == null ? null : () => onVisitTap!(visit),
         );
       },
     );
