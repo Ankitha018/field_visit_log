@@ -54,12 +54,22 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
     try {
       await _createVisit(event.visit);
 
-      final createdVisit = event.visit.copyWith(
-        status: event.visit.status,
-        syncedAt: null,
+      emit(
+        VisitCreated(
+          visit: event.visit.copyWith(
+            status: event.visit.status,
+            syncedAt: null,
+          ),
+        ),
       );
 
-      emit(VisitCreated(visit: createdVisit));
+      final visits = await _getVisits();
+
+      if (visits.isEmpty) {
+        emit(const VisitEmpty());
+      } else {
+        emit(VisitLoaded(visits: visits));
+      }
     } catch (error) {
       emit(VisitError(message: error.toString()));
     }
@@ -75,6 +85,14 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
       await _updateVisit(event.visit);
 
       emit(VisitUpdated(visit: event.visit));
+
+      final visits = await _getVisits();
+
+      if (visits.isEmpty) {
+        emit(const VisitEmpty());
+      } else {
+        emit(VisitLoaded(visits: visits));
+      }
     } catch (error) {
       emit(VisitError(message: error.toString()));
     }
@@ -89,7 +107,10 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
     try {
       final status = await _syncVisits(event.visit);
 
-      final updated = event.visit.copyWith(status: status);
+      final updated = event.visit.copyWith(
+        status: status,
+        syncedAt: status.value == 'synced' ? DateTime.now() : null,
+      );
 
       switch (status.value) {
         case 'synced':
@@ -103,6 +124,14 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
         case 'failed':
           emit(VisitFailed(visit: updated, message: 'Visit sync failed.'));
           break;
+      }
+
+      final visits = await _getVisits();
+
+      if (visits.isEmpty) {
+        emit(const VisitEmpty());
+      } else {
+        emit(VisitLoaded(visits: visits));
       }
     } catch (error) {
       emit(VisitFailed(visit: event.visit, message: error.toString()));

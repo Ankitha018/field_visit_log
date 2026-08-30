@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/theme/app_spacing.dart';
 import '../../core/utils/snackbar_helper.dart';
 import '../../domain/entities/visit.dart';
 import '../../domain/enums/visit_status.dart';
@@ -29,7 +28,7 @@ class CreateVisitScreen extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: EdgeInsets.all(AppSpacing.paddingMd),
+          padding: const EdgeInsets.all(16),
           child: VisitForm(
             onSubmit:
                 ({

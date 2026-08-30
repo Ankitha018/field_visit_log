@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/localization/app_localizations.dart';
+import '../../core/utils/snackbar_helper.dart';
 import '../../domain/entities/visit.dart';
 import '../bloc/visit/visit_bloc.dart';
 import '../bloc/visit/visit_event.dart';
@@ -14,8 +16,17 @@ class UpdateVisitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Update Visit')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          tooltip: MaterialLocalizations.of(context).closeButtonLabel,
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(l10n.updateVisit),
+      ),
       body: BlocListener<VisitBloc, VisitState>(
         listener: (context, state) {
           if (state is VisitUpdated) {
@@ -24,19 +35,17 @@ class UpdateVisitScreen extends StatelessWidget {
           }
 
           if (state is VisitError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            SnackbarHelper.showError(context, state.message);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           child: VisitForm(
             initialSiteName: visit.siteName,
             initialDate: visit.date,
             initialLocation: visit.location,
             initialNotes: visit.notes,
-            buttonText: 'Update',
+            buttonText: l10n.saveChanges,
             onSubmit:
                 ({
                   required String siteName,

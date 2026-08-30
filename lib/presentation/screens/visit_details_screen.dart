@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/components/buttons/primary_button.dart';
+import '../../app/routes/route_names.dart';
 import '../../core/components/chips/status_chip.dart';
+import '../../core/localization/app_localizations.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/snackbar_helper.dart';
@@ -30,31 +33,42 @@ class VisitDetailsScreen extends StatelessWidget {
     }
   }
 
-  String _getStatusLabel(VisitStatus status) {
+  String _getStatusLabel(BuildContext context, VisitStatus status) {
+    final l10n = AppLocalizations.of(context);
+
     switch (status) {
       case VisitStatus.draft:
-        return 'Draft';
+        return l10n.draft;
 
       case VisitStatus.synced:
-        return 'Synced';
+        return l10n.synced;
 
       case VisitStatus.failed:
-        return 'Failed';
+        return l10n.failed;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Visit Details')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(l10n.visitDetails),
+      ),
       body: BlocConsumer<VisitBloc, VisitState>(
         listener: (context, state) {
           if (state is VisitSynced) {
-            SnackbarHelper.showSuccess(context, 'Visit synced successfully.');
+            SnackbarHelper.showSuccess(context, l10n.visitSyncedSuccessfully);
           }
 
           if (state is VisitDraft) {
-            SnackbarHelper.showSuccess(context, 'Visit saved as draft.');
+            SnackbarHelper.showSuccess(context, l10n.visitSavedAsDraft);
           }
 
           if (state is VisitFailed) {
@@ -64,45 +78,173 @@ class VisitDetailsScreen extends StatelessWidget {
         builder: (context, state) {
           final saving = state is VisitSaving;
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(visit.siteName, style: AppTextStyles.headline),
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.paddingLg,
+                vertical: AppSpacing.paddingMd,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            visit.siteName,
+                            style: AppTextStyles.headline.copyWith(
+                              fontSize: 28,
+                            ),
+                          ),
 
-                SizedBox(height: AppSpacing.paddingMd),
+                          const SizedBox(height: AppSpacing.gapMd),
 
-                Text(visit.location, style: AppTextStyles.bodySecondary),
+                          StatusChip(
+                            label: _getStatusLabel(context, visit.status),
+                            type: _getStatusType(visit.status),
+                          ),
 
-                SizedBox(height: AppSpacing.paddingMd),
+                          const SizedBox(height: AppSpacing.gapXl),
 
-                Text(visit.notes, style: AppTextStyles.body),
+                          const Divider(
+                            color: AppColors.line,
+                            thickness: AppDimensions.dividerThickness,
+                          ),
 
-                SizedBox(height: AppSpacing.paddingMd),
+                          const SizedBox(height: AppSpacing.gapXl),
 
-                StatusChip(
-                  label: _getStatusLabel(visit.status),
-                  type: _getStatusType(visit.status),
-                ),
+                          _DetailRow(
+                            label: l10n.date.toUpperCase(),
+                            value: l10n.getFieldVisitDate(visit.date),
+                          ),
 
-                const Spacer(),
+                          const SizedBox(height: AppSpacing.gapLg),
 
-                PrimaryButton(
-                  label: saving ? 'Saving...' : 'Save',
-                  onPressed: saving
-                      ? null
-                      : () {
-                          context.read<VisitBloc>().add(
-                            SyncVisitEvent(visit: visit),
-                          );
-                        },
-                ),
-              ],
+                          _DetailRow(
+                            label: l10n.location.toUpperCase(),
+                            value: visit.location,
+                          ),
+
+                          const SizedBox(height: AppSpacing.gapLg),
+
+                          _DetailRow(
+                            label: l10n.loggedBy.toUpperCase(),
+                            value: l10n.fieldVisitLog,
+                          ),
+
+                          const SizedBox(height: AppSpacing.gapXl),
+
+                          const Divider(
+                            color: AppColors.line,
+                            thickness: AppDimensions.dividerThickness,
+                          ),
+
+                          const SizedBox(height: AppSpacing.gapXl),
+
+                          Text(l10n.notes, style: AppTextStyles.label),
+
+                          const SizedBox(height: AppSpacing.gapSm),
+
+                          Text(
+                            visit.notes.isEmpty ? '-' : visit.notes,
+                            style: AppTextStyles.body.copyWith(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.gapMd),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: AppDimensions.controlHeight,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                RouteNames.updateVisit,
+                                arguments: visit,
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                color: AppColors.foreground,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
+                            child: Text(l10n.edit),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: AppSpacing.gapMd),
+
+                      Expanded(
+                        child: SizedBox(
+                          height: AppDimensions.controlHeight,
+                          child: ElevatedButton(
+                            onPressed: saving
+                                ? null
+                                : () {
+                                    context.read<VisitBloc>().add(
+                                      SyncVisitEvent(visit: visit),
+                                    );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: AppColors.onPrimary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
+                            child: Text(saving ? l10n.saving : l10n.save),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  const _DetailRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 88,
+          child: Text(
+            label,
+            style: AppTextStyles.caption.copyWith(
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(value, style: AppTextStyles.body.copyWith(fontSize: 16)),
+        ),
+      ],
     );
   }
 }

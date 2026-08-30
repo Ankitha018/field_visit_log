@@ -5,6 +5,13 @@ import '../../app/routes/route_names.dart';
 import '../../core/components/feedback/empty_state.dart';
 import '../../core/components/feedback/error_view.dart';
 import '../../core/components/feedback/loading_view.dart';
+import '../../core/localization/app_localizations.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimensions.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../bloc/network/network_bloc.dart';
+import '../bloc/network/network_state.dart';
 import '../bloc/visit/visit_bloc.dart';
 import '../bloc/visit/visit_event.dart';
 import '../bloc/visit/visit_state.dart';
@@ -53,42 +60,103 @@ class _VisitListScreenState extends State<VisitListScreen> {
     context.read<VisitBloc>().add(const LoadVisits());
   }
 
+  Widget _buildOfflineBanner() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.paddingMd,
+        vertical: AppSpacing.paddingSm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.warning.withValues(alpha: 0.12),
+        border: Border(
+          bottom: BorderSide(color: AppColors.warning.withValues(alpha: 0.3)),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.cloud_off_outlined,
+            size: AppDimensions.iconSize,
+            color: AppColors.warning,
+          ),
+          const SizedBox(width: AppSpacing.gapSm),
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context).offlineMessage,
+              style: AppTextStyles.bodySecondary.copyWith(
+                color: AppColors.foreground,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVisitContent(VisitState state) {
+    if (state is VisitLoading) {
+      return const LoadingView();
+    }
+
+    if (state is VisitEmpty) {
+      return EmptyState(
+        title: AppLocalizations.of(context).noVisitsYet,
+        icon: Icons.assignment_outlined,
+        message: AppLocalizations.of(context).createFirstVisit,
+        onAction: _openCreateVisit,
+      );
+    }
+
+    if (state is VisitError) {
+      return ErrorView(message: state.message);
+    }
+
+    if (state is VisitLoaded) {
+      return VisitList(visits: state.visits, onVisitTap: _openVisitDetails);
+    }
+
+    return const SizedBox.shrink();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Field Visits')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).fieldVisits),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.language),
+            tooltip: AppLocalizations.of(context).language,
+            onPressed: () {
+              Navigator.pushNamed(context, RouteNames.language);
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openCreateVisit,
         child: const Icon(Icons.add),
       ),
-      body: BlocBuilder<VisitBloc, VisitState>(
-        builder: (context, state) {
-          if (state is VisitLoading) {
-            return const LoadingView();
-          }
+      body: Column(
+        children: [
+          BlocBuilder<NetworkBloc, NetworkState>(
+            builder: (context, networkState) {
+              if (networkState is NetworkOffline) {
+                return _buildOfflineBanner();
+              }
 
-          if (state is VisitEmpty) {
-            return EmptyState(
-              title: 'No visits yet',
-              icon: Icons.assignment_outlined,
-              message: 'Create your first field visit.',
-              onAction: _openCreateVisit,
-            );
-          }
-
-          if (state is VisitError) {
-            return ErrorView(message: state.message);
-          }
-
-          if (state is VisitLoaded) {
-            return VisitList(
-              visits: state.visits,
-              onVisitTap: _openVisitDetails,
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
+              return const SizedBox.shrink();
+            },
+          ),
+          Expanded(
+            child: BlocBuilder<VisitBloc, VisitState>(
+              builder: (context, state) {
+                return _buildVisitContent(state);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -5,4 +5,5 @@ class RouteNames {
   static const createVisit = '/create-visit';
   static const updateVisit = '/update-visit';
   static const visitDetails = '/visit-details';
+  static const language = '/language';
 }
