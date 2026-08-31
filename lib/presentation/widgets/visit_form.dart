@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/components/buttons/primary_button.dart';
 import '../../core/components/inputs/app_date_field.dart';
 import '../../core/components/inputs/app_text_field.dart';
-import '../../core/localization/app_localizations.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_dimensions.dart';
 import '../../core/theme/app_spacing.dart';
-import '../../core/theme/app_text_styles.dart';
 
 class VisitForm extends StatefulWidget {
   const VisitForm({
@@ -94,73 +90,46 @@ class _VisitFormState extends State<VisitForm> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildLabel(l10n.siteName),
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        child: Column(
+          children: [
+            AppTextField(controller: _siteNameController, label: 'Site name'),
 
-          const SizedBox(height: AppSpacing.gapSm),
+            const SizedBox(height: AppSpacing.paddingMd),
 
-          AppTextField(controller: _siteNameController, label: l10n.siteName),
+            AppDateField(
+              label: 'Date',
+              value: _selectedDate,
+              onChanged: (date) {
+                setState(() {
+                  _selectedDate = date;
+                });
+              },
+            ),
 
-          const SizedBox(height: AppSpacing.gapLg),
+            const SizedBox(height: AppSpacing.paddingMd),
 
-          _buildLabel(l10n.date),
+            AppTextField(controller: _locationController, label: 'Location'),
 
-          const SizedBox(height: AppSpacing.gapSm),
+            const SizedBox(height: AppSpacing.paddingMd),
 
-          AppDateField(
-            label: l10n.date,
-            value: _selectedDate,
-            onChanged: (date) {
-              setState(() {
-                _selectedDate = date;
-              });
-            },
-          ),
+            AppTextField(
+              controller: _notesController,
+              label: 'Notes',
+              maxLines: 4,
+            ),
 
-          const SizedBox(height: AppSpacing.gapLg),
+            const SizedBox(height: AppSpacing.paddingLg),
 
-          _buildLabel(l10n.location),
-
-          const SizedBox(height: AppSpacing.gapSm),
-
-          AppTextField(controller: _locationController, label: l10n.location),
-
-          const SizedBox(height: AppSpacing.gapLg),
-
-          _buildLabel(l10n.notes),
-
-          const SizedBox(height: AppSpacing.gapSm),
-
-          AppTextField(
-            controller: _notesController,
-            label: l10n.notes,
-            maxLines: 5,
-          ),
-
-          const SizedBox(height: AppSpacing.gapXl),
-
-          SizedBox(
-            width: double.infinity,
-            height: AppDimensions.controlHeight,
-            child: PrimaryButton(label: widget.buttonText, onPressed: _submit),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: AppTextStyles.label.copyWith(
-        color: AppColors.foreground,
-        fontWeight: FontWeight.w600,
+            PrimaryButton(label: widget.buttonText, onPressed: _submit),
+          ],
+        ),
       ),
     );
   }

@@ -15,32 +15,32 @@ class StatusChip extends StatelessWidget {
   Color get _backgroundColor {
     switch (type) {
       case StatusChipType.neutral:
-        return AppColors.hover;
+        return const Color(0xFFF0EDE7);
 
       case StatusChipType.success:
-        return AppColors.success.withValues(alpha: 0.12);
+        return const Color(0xFFE4F4EA);
 
       case StatusChipType.warning:
-        return AppColors.warning.withValues(alpha: 0.12);
+        return const Color(0xFFFFF2D8);
 
       case StatusChipType.error:
-        return AppColors.error.withValues(alpha: 0.12);
+        return const Color(0xFFFCE5E5);
 
       case StatusChipType.primary:
-        return AppColors.primary.withValues(alpha: 0.08);
+        return const Color(0xFFFFE9DD);
     }
   }
 
   Color get _foregroundColor {
     switch (type) {
       case StatusChipType.neutral:
-        return AppColors.muted;
+        return const Color(0xFF6F6A62);
 
       case StatusChipType.success:
-        return AppColors.success;
+        return const Color(0xFF27834B);
 
       case StatusChipType.warning:
-        return AppColors.warning;
+        return const Color(0xFF9A6810);
 
       case StatusChipType.error:
         return AppColors.error;
@@ -54,7 +54,7 @@ class StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.paddingMd,
+        horizontal: AppSpacing.paddingSm,
         vertical: AppSpacing.paddingXs,
       ),
       decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class StatusChip extends StatelessWidget {
         label,
         style: AppTextStyles.caption.copyWith(
           color: _foregroundColor,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
