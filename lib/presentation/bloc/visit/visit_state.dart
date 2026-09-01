@@ -38,7 +38,6 @@ class VisitCreated extends VisitState {
   final Visit visit;
 }
 
-// ADD IT HERE
 class VisitUpdated extends VisitState {
   const VisitUpdated({required this.visit});
 
@@ -52,9 +51,10 @@ class VisitSynced extends VisitState {
 }
 
 class VisitDraft extends VisitState {
-  const VisitDraft({required this.visit});
+  const VisitDraft({required this.visit, this.message});
 
   final Visit visit;
+  final String? message;
 }
 
 class VisitFailed extends VisitState {

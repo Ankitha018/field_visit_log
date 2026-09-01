@@ -1,19 +1,15 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../../core/database/database_helper.dart';
 import '../../core/network/connectivity_service.dart';
-
 import '../../data/datasources/visit_local_data_source.dart';
 import '../../data/datasources/visit_remote_data_source.dart';
 import '../../data/mappers/visit_mapper.dart';
 import '../../data/repositories/visit_repository_impl.dart';
-
 import '../../domain/repositories/visit_repository.dart';
-import '../../domain/usecases/get_visits.dart';
 import '../../domain/usecases/create_visit.dart';
-import '../../domain/usecases/update_visit.dart';
+import '../../domain/usecases/get_visits.dart';
 import '../../domain/usecases/sync_visits.dart';
-
+import '../../domain/usecases/update_visit.dart';
 import '../../presentation/bloc/network/network_bloc.dart';
 import '../../presentation/bloc/visit/visit_bloc.dart';
 
@@ -55,6 +51,7 @@ class Injection {
       localDataSource: localDataSource,
       remoteDataSource: remoteDataSource,
       mapper: visitMapper,
+      connectivityService: connectivityService,
     );
 
     // Use cases

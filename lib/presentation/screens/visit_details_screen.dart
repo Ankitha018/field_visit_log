@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../app/routes/route_names.dart';
 import '../../core/components/chips/status_chip.dart';
 import '../../core/localization/app_localizations.dart';
@@ -16,13 +17,16 @@ import '../bloc/visit/visit_state.dart';
 
 class VisitDetailsScreen extends StatefulWidget {
   const VisitDetailsScreen({super.key, required this.visit});
+
   final Visit visit;
+
   @override
   State<VisitDetailsScreen> createState() => _VisitDetailsScreenState();
 }
 
 class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
   late Visit _visit;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +46,7 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
 
   String _getStatusLabel(BuildContext context, VisitStatus status) {
     final l10n = AppLocalizations.of(context);
+
     switch (status) {
       case VisitStatus.draft:
         return l10n.draft;
@@ -58,9 +63,11 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
       RouteNames.updateVisit,
       arguments: _visit,
     );
+
     if (!mounted) {
       return;
     }
+
     if (updatedVisit is Visit) {
       setState(() {
         _visit = updatedVisit;
@@ -71,6 +78,7 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -86,23 +94,32 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
             setState(() {
               _visit = state.visit;
             });
+
             SnackbarHelper.showSuccess(context, l10n.visitSyncedSuccessfully);
           }
+
           if (state is VisitDraft) {
             setState(() {
               _visit = state.visit;
             });
-            SnackbarHelper.showSuccess(context, l10n.visitSavedAsDraft);
+
+            SnackbarHelper.showSuccess(
+              context,
+              state.message ?? l10n.visitSavedAsDraft,
+            );
           }
+
           if (state is VisitFailed) {
             setState(() {
               _visit = state.visit;
             });
+
             SnackbarHelper.showError(context, state.message);
           }
         },
         builder: (context, state) {
           final saving = state is VisitSaving;
+
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -139,7 +156,6 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
                             value: l10n.getFieldVisitDate(_visit.date),
                           ),
                           const SizedBox(height: AppSpacing.gapLg),
-
                           _DetailRow(
                             label: l10n.location.toUpperCase(),
                             value: _visit.location,
@@ -222,8 +238,10 @@ class _VisitDetailsScreenState extends State<VisitDetailsScreen> {
 
 class _DetailRow extends StatelessWidget {
   const _DetailRow({required this.label, required this.value});
+
   final String label;
   final String value;
+
   @override
   Widget build(BuildContext context) {
     return Row(

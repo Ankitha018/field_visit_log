@@ -105,20 +105,27 @@ class VisitBloc extends Bloc<VisitEvent, VisitState> {
     emit(const VisitSaving());
 
     try {
-      final status = await _syncVisits(event.visit);
+      final result = await _syncVisits(event.visit);
 
       final updated = event.visit.copyWith(
-        status: status,
-        syncedAt: status.value == 'synced' ? DateTime.now() : null,
+        status: result.status,
+        syncedAt: result.status.value == 'synced' ? DateTime.now() : null,
       );
 
-      switch (status.value) {
+      switch (result.status.value) {
         case 'synced':
           emit(VisitSynced(visit: updated));
           break;
 
         case 'draft':
-          emit(VisitDraft(visit: updated));
+          emit(
+            VisitDraft(
+              visit: updated,
+              message: result.wasOffline
+                  ? 'No network connection. Visit saved as draft.'
+                  : 'Visit saved as draft.',
+            ),
+          );
           break;
 
         case 'failed':

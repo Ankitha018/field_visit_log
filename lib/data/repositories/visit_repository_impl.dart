@@ -1,4 +1,6 @@
 import '../../core/errors/app_exception.dart';
+import '../../core/network/connectivity_service.dart';
+import '../../domain/entities/sync_result.dart';
 import '../../domain/entities/visit.dart';
 import '../../domain/enums/visit_status.dart';
 import '../../domain/repositories/visit_repository.dart';
@@ -11,13 +13,16 @@ class VisitRepositoryImpl implements VisitRepository {
     required VisitLocalDataSource localDataSource,
     required VisitRemoteDataSource remoteDataSource,
     required VisitMapper mapper,
+    required ConnectivityService connectivityService,
   }) : _localDataSource = localDataSource,
        _remoteDataSource = remoteDataSource,
-       _mapper = mapper;
+       _mapper = mapper,
+       _connectivityService = connectivityService;
 
   final VisitLocalDataSource _localDataSource;
   final VisitRemoteDataSource _remoteDataSource;
   final VisitMapper _mapper;
+  final ConnectivityService _connectivityService;
 
   @override
   Future<List<Visit>> getVisits() async {
@@ -75,18 +80,43 @@ class VisitRepositoryImpl implements VisitRepository {
   }
 
   @override
-  Future<VisitStatus> syncVisit(Visit visit) async {
+  Future<SyncResult> syncVisit(Visit visit) async {
     try {
+      final connected = await _connectivityService.isConnected();
+
+      // No internet connection.
+      // Keep the visit locally as a draft.
+      if (!connected) {
+        final draft = visit.copyWith(status: VisitStatus.draft, syncedAt: null);
+
+        final model = _mapper.toModel(draft);
+
+        await _localDataSource.insertLocalVisit(model);
+
+        return const SyncResult(status: VisitStatus.draft, wasOffline: true);
+      }
+
+      // Internet is available, so attempt synchronization.
       final result = await _remoteDataSource.syncVisit();
+
       final status = _convertResult(result);
+
       final updatedVisit = visit.copyWith(
         status: status,
         syncedAt: status == VisitStatus.synced ? DateTime.now() : null,
       );
+
       final model = _mapper.toModel(updatedVisit);
-      await _localDataSource.deleteLocalVisit(visit.id);
-      await _localDataSource.insertVisitLog(model);
-      return status;
+
+      if (status == VisitStatus.synced) {
+        await _localDataSource.deleteLocalVisit(visit.id);
+        await _localDataSource.insertVisitLog(model);
+      } else {
+        // Keep Draft/Failed visits locally.
+        await _localDataSource.insertLocalVisit(model);
+      }
+
+      return SyncResult(status: status, wasOffline: false);
     } catch (_) {
       throw const SyncException(
         message: 'Unable to sync visit.',
@@ -99,8 +129,10 @@ class VisitRepositoryImpl implements VisitRepository {
     switch (result) {
       case MockSyncResult.synced:
         return VisitStatus.synced;
+
       case MockSyncResult.draft:
         return VisitStatus.draft;
+
       case MockSyncResult.failed:
         return VisitStatus.failed;
     }
