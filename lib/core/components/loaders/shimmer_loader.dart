@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../theme/app_colors.dart';
 
 class ShimmerLoader extends StatefulWidget {
   final Widget child;
   final Duration duration;
-
   const ShimmerLoader({
     super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 1200),
   });
-
   @override
   State<ShimmerLoader> createState() => _ShimmerLoaderState();
 }
@@ -19,11 +16,9 @@ class ShimmerLoader extends StatefulWidget {
 class _ShimmerLoaderState extends State<ShimmerLoader>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(vsync: this, duration: widget.duration)
       ..repeat();
   }
@@ -40,7 +35,6 @@ class _ShimmerLoaderState extends State<ShimmerLoader>
       animation: _controller,
       builder: (context, child) {
         final position = (_controller.value * 2) - 1;
-
         return ShaderMask(
           blendMode: BlendMode.srcATop,
           shaderCallback: (bounds) {

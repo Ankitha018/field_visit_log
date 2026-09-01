@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../core/components/cards/app_card.dart';
 import '../../core/components/chips/status_chip.dart';
 import '../../core/theme/app_spacing.dart';
@@ -9,10 +8,8 @@ import '../../domain/enums/visit_status.dart';
 
 class VisitCard extends StatelessWidget {
   const VisitCard({super.key, required this.visit, this.onTap});
-
   final Visit visit;
   final VoidCallback? onTap;
-
   StatusChipType _getStatusChipType(VisitStatus status) {
     switch (status) {
       case VisitStatus.draft:

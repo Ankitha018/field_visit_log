@@ -1,15 +1,11 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../models/visit_model.dart';
 
 class VisitLocalDataSource {
   VisitLocalDataSource(this._database);
-
   final Database _database;
-
   static const String localVisitsTable = 'local_visits';
   static const String visitLogTable = 'visit_log';
-
   Future<void> insertLocalVisit(VisitModel visit) async {
     await _database.insert(
       localVisitsTable,
@@ -23,7 +19,6 @@ class VisitLocalDataSource {
       localVisitsTable,
       orderBy: 'created_at DESC',
     );
-
     return rows.map(VisitModel.fromMap).toList();
   }
 
@@ -34,11 +29,9 @@ class VisitLocalDataSource {
       whereArgs: [id],
       limit: 1,
     );
-
     if (rows.isEmpty) {
       return null;
     }
-
     return VisitModel.fromMap(rows.first);
   }
 
@@ -50,7 +43,6 @@ class VisitLocalDataSource {
       whereArgs: [id],
       limit: 1,
     );
-
     return rows.isNotEmpty;
   }
 
@@ -71,7 +63,6 @@ class VisitLocalDataSource {
       visitLogTable,
       orderBy: 'created_at DESC',
     );
-
     return rows.map(VisitModel.fromMap).toList();
   }
 
@@ -82,11 +73,9 @@ class VisitLocalDataSource {
       whereArgs: [id],
       limit: 1,
     );
-
     if (rows.isEmpty) {
       return null;
     }
-
     return VisitModel.fromMap(rows.first);
   }
 }

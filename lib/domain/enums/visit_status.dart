@@ -4,9 +4,7 @@ enum VisitStatus {
   failed('failed');
 
   const VisitStatus(this.value);
-
   final String value;
-
   static VisitStatus fromString(String value) {
     return VisitStatus.values.firstWhere(
       (status) => status.value == value,

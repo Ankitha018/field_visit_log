@@ -3,22 +3,16 @@ import 'package:intl/intl.dart';
 
 class AppLocalizations {
   const AppLocalizations(this.locale);
-
   final Locale locale;
-
   static const supportedLocales = [Locale('en'), Locale('de'), Locale('hi')];
-
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
-
   static AppLocalizations of(BuildContext context) {
     final localizations = Localizations.of<AppLocalizations>(
       context,
       AppLocalizations,
     );
-
     assert(localizations != null);
-
     return localizations!;
   }
 
@@ -49,12 +43,12 @@ class AppLocalizations {
   String get createVisit {
     switch (locale.languageCode) {
       case 'de':
-        return 'Besuch erstellen';
+        return 'Neuer Besuch';
       case 'hi':
-        return 'विज़िट बनाएं';
+        return 'नई विज़िट';
       case 'en':
       default:
-        return 'Create Visit';
+        return 'New Visit';
     }
   }
 
@@ -186,7 +180,7 @@ class AppLocalizations {
         return 'आप ऑफ़लाइन हैं। सहेजी गई विज़िट दिखाई जा रही हैं।';
       case 'en':
       default:
-        return 'You are offline. Showing saved visits.';
+        return 'You are offline. Changes saved locally.';
     }
   }
 

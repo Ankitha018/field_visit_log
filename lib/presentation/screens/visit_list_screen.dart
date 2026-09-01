@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../app/routes/route_names.dart';
 import '../../core/components/feedback/empty_state.dart';
 import '../../core/components/feedback/error_view.dart';
@@ -15,11 +14,11 @@ import '../bloc/network/network_state.dart';
 import '../bloc/visit/visit_bloc.dart';
 import '../bloc/visit/visit_event.dart';
 import '../bloc/visit/visit_state.dart';
+import '../widgets/field_visit_drawer.dart';
 import '../widgets/visit_list.dart';
 
 class VisitListScreen extends StatefulWidget {
   const VisitListScreen({super.key});
-
   @override
   State<VisitListScreen> createState() => _VisitListScreenState();
 }
@@ -28,7 +27,6 @@ class _VisitListScreenState extends State<VisitListScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         context.read<VisitBloc>().add(const LoadVisits());
@@ -38,11 +36,9 @@ class _VisitListScreenState extends State<VisitListScreen> {
 
   Future<void> _openCreateVisit() async {
     await Navigator.pushNamed(context, RouteNames.createVisit);
-
     if (!mounted) {
       return;
     }
-
     context.read<VisitBloc>().add(const LoadVisits());
   }
 
@@ -52,11 +48,9 @@ class _VisitListScreenState extends State<VisitListScreen> {
       RouteNames.visitDetails,
       arguments: visit,
     );
-
     if (!mounted) {
       return;
     }
-
     context.read<VisitBloc>().add(const LoadVisits());
   }
 
@@ -98,7 +92,6 @@ class _VisitListScreenState extends State<VisitListScreen> {
     if (state is VisitLoading) {
       return const LoadingView();
     }
-
     if (state is VisitEmpty) {
       return EmptyState(
         title: AppLocalizations.of(context).noVisitsYet,
@@ -107,32 +100,33 @@ class _VisitListScreenState extends State<VisitListScreen> {
         onAction: _openCreateVisit,
       );
     }
-
     if (state is VisitError) {
       return ErrorView(message: state.message);
     }
-
     if (state is VisitLoaded) {
       return VisitList(visits: state.visits, onVisitTap: _openVisitDetails);
     }
-
     return const SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
+      drawer: const FieldVisitDrawer(),
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).fieldVisits),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.language),
-            tooltip: AppLocalizations.of(context).language,
-            onPressed: () {
-              Navigator.pushNamed(context, RouteNames.language);
-            },
-          ),
-        ],
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: 'Open menu',
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+        title: Text(l10n.fieldVisits),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openCreateVisit,
@@ -145,7 +139,6 @@ class _VisitListScreenState extends State<VisitListScreen> {
               if (networkState is NetworkOffline) {
                 return _buildOfflineBanner();
               }
-
               return const SizedBox.shrink();
             },
           ),

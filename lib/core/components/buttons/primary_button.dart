@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../theme/app_colors.dart';
 import '../../theme/app_dimensions.dart';
 import '../../theme/app_spacing.dart';
@@ -10,7 +9,6 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final Widget? icon;
-
   const PrimaryButton({
     super.key,
     required this.label,
@@ -18,7 +16,6 @@ class PrimaryButton extends StatelessWidget {
     this.isLoading = false,
     this.icon,
   });
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../core/localization/app_localizations.dart';
 import '../../core/localization/localization_controller.dart';
 import '../../core/theme/app_spacing.dart';
@@ -7,16 +6,13 @@ import '../../core/theme/app_text_styles.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key, required this.controller});
-
   final LocalizationController controller;
-
   @override
   State<LanguageScreen> createState() => _LanguageScreenState();
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
   late Locale _selectedLocale;
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +28,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
     if (locale == null) {
       return;
     }
-
     setState(() {
       _selectedLocale = locale;
     });
@@ -41,7 +36,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
     return Scaffold(
       appBar: AppBar(title: Text(l10n.language)),
       body: Padding(

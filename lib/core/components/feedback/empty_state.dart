@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../buttons/primary_button.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_dimensions.dart';
@@ -12,7 +11,6 @@ class EmptyState extends StatelessWidget {
   final String message;
   final String? actionLabel;
   final VoidCallback? onAction;
-
   const EmptyState({
     super.key,
     required this.icon,

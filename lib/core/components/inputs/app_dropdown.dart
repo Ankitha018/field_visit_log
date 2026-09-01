@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
@@ -12,7 +11,6 @@ class AppDropdown<T> extends StatelessWidget {
   final ValueChanged<T?>? onChanged;
   final String? errorText;
   final bool enabled;
-
   const AppDropdown({
     super.key,
     required this.label,
@@ -23,7 +21,6 @@ class AppDropdown<T> extends StatelessWidget {
     this.errorText,
     this.enabled = true,
   });
-
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(

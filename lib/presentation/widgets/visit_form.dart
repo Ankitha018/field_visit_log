@@ -41,21 +41,16 @@ class _VisitFormState extends State<VisitForm> {
   late final TextEditingController _siteNameController;
   late final TextEditingController _locationController;
   late final TextEditingController _notesController;
-
   DateTime? _selectedDate;
-
   @override
   void initState() {
     super.initState();
-
     _siteNameController = TextEditingController(
       text: widget.initialSiteName ?? '',
     );
-
     _locationController = TextEditingController(
       text: widget.initialLocation ?? '',
     );
-
     _notesController = TextEditingController(text: widget.initialNotes ?? '');
 
     _selectedDate = widget.initialDate;
@@ -73,13 +68,10 @@ class _VisitFormState extends State<VisitForm> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
     final date = _selectedDate;
-
     if (date == null) {
       return;
     }
-
     widget.onSubmit(
       siteName: _siteNameController.text.trim(),
       date: date,
@@ -114,19 +106,14 @@ class _VisitFormState extends State<VisitForm> {
             ),
 
             const SizedBox(height: AppSpacing.paddingMd),
-
             AppTextField(controller: _locationController, label: 'Location'),
-
             const SizedBox(height: AppSpacing.paddingMd),
-
             AppTextField(
               controller: _notesController,
               label: 'Notes',
               maxLines: 4,
             ),
-
             const SizedBox(height: AppSpacing.paddingLg),
-
             PrimaryButton(label: widget.buttonText, onPressed: _submit),
           ],
         ),

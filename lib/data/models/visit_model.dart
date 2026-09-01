@@ -24,7 +24,6 @@ class VisitModel {
 
   factory VisitModel.fromMap(Map<String, dynamic> map) {
     final stage = map['stage'] as String?;
-
     return VisitModel(
       id: map['id'] as String,
       siteName: map['site_name'] as String,

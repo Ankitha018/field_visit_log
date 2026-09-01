@@ -78,20 +78,14 @@ class VisitRepositoryImpl implements VisitRepository {
   Future<VisitStatus> syncVisit(Visit visit) async {
     try {
       final result = await _remoteDataSource.syncVisit();
-
       final status = _convertResult(result);
-
       final updatedVisit = visit.copyWith(
         status: status,
         syncedAt: status == VisitStatus.synced ? DateTime.now() : null,
       );
-
       final model = _mapper.toModel(updatedVisit);
-
       await _localDataSource.deleteLocalVisit(visit.id);
-
       await _localDataSource.insertVisitLog(model);
-
       return status;
     } catch (_) {
       throw const SyncException(
@@ -105,10 +99,8 @@ class VisitRepositoryImpl implements VisitRepository {
     switch (result) {
       case MockSyncResult.synced:
         return VisitStatus.synced;
-
       case MockSyncResult.draft:
         return VisitStatus.draft;
-
       case MockSyncResult.failed:
         return VisitStatus.failed;
     }

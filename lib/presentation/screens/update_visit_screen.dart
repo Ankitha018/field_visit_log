@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../core/localization/app_localizations.dart';
 import '../../core/utils/snackbar_helper.dart';
 import '../../domain/entities/visit.dart';
@@ -11,13 +10,10 @@ import '../widgets/visit_form.dart';
 
 class UpdateVisitScreen extends StatelessWidget {
   const UpdateVisitScreen({super.key, required this.visit});
-
   final Visit visit;
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,10 +26,9 @@ class UpdateVisitScreen extends StatelessWidget {
       body: BlocListener<VisitBloc, VisitState>(
         listener: (context, state) {
           if (state is VisitUpdated) {
-            Navigator.pop(context);
+            Navigator.pop(context, state.visit);
             return;
           }
-
           if (state is VisitError) {
             SnackbarHelper.showError(context, state.message);
           }
@@ -59,7 +54,6 @@ class UpdateVisitScreen extends StatelessWidget {
                     location: location,
                     notes: notes,
                   );
-
                   context.read<VisitBloc>().add(
                     UpdateVisitEvent(visit: updatedVisit),
                   );

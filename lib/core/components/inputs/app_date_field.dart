@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
@@ -12,7 +11,6 @@ class AppDateField extends StatelessWidget {
   final DateTime? lastDate;
   final String? errorText;
   final bool enabled;
-
   const AppDateField({
     super.key,
     required this.label,
@@ -31,7 +29,6 @@ class AppDateField extends StatelessWidget {
       firstDate: firstDate ?? DateTime(2000),
       lastDate: lastDate ?? DateTime(2100),
     );
-
     if (selectedDate != null) {
       onChanged(selectedDate);
     }
@@ -44,7 +41,6 @@ class AppDateField extends StatelessWidget {
         : '${value!.day.toString().padLeft(2, '0')}/'
               '${value!.month.toString().padLeft(2, '0')}/'
               '${value!.year}';
-
     return InkWell(
       onTap: enabled ? () => _selectDate(context) : null,
       borderRadius: BorderRadius.circular(6),

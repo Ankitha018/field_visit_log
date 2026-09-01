@@ -35,16 +35,12 @@ class StatusChip extends StatelessWidget {
     switch (type) {
       case StatusChipType.neutral:
         return const Color(0xFF6F6A62);
-
       case StatusChipType.success:
         return const Color(0xFF27834B);
-
       case StatusChipType.warning:
         return const Color(0xFF9A6810);
-
       case StatusChipType.error:
         return AppColors.error;
-
       case StatusChipType.primary:
         return AppColors.primary;
     }

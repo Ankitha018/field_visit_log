@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import '../enums/visit_status.dart';
 
 class Visit extends Equatable {
@@ -13,7 +12,6 @@ class Visit extends Equatable {
     required this.createdAt,
     this.syncedAt,
   });
-
   final String id;
   final String siteName;
   final DateTime date;
@@ -22,7 +20,6 @@ class Visit extends Equatable {
   final VisitStatus status;
   final DateTime createdAt;
   final DateTime? syncedAt;
-
   Visit copyWith({
     String? id,
     String? siteName,

@@ -3,7 +3,6 @@ import '../models/visit_model.dart';
 
 class VisitMapper {
   const VisitMapper();
-
   Visit toEntity(VisitModel model) {
     return model.toEntity();
   }

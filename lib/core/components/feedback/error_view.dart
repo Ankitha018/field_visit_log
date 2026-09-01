@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../buttons/primary_button.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_dimensions.dart';
@@ -10,14 +9,12 @@ class ErrorView extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
   final String retryLabel;
-
   const ErrorView({
     super.key,
     required this.message,
     this.onRetry,
     this.retryLabel = 'Retry',
   });
-
   @override
   Widget build(BuildContext context) {
     return Center(
