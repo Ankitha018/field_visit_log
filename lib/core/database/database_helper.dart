@@ -1,6 +1,5 @@
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
-
 class DatabaseHelper {
   DatabaseHelper._();
   static final DatabaseHelper instance = DatabaseHelper._();
